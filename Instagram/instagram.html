@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="icon" type="image/png" href="./img/insta-fav.ico">
+  <title>Instagram Clone</title>
+</head>
+<body>
+  <main class="flex align-items-center justify-content-center">
+    <section id="auth" class="flex direction-column">
+      <div class="panel login flex direction-column">
+        <h1 title="Instagram" class="flex justify-content-center">
+          <img src="./img/instagram-logo.png" alt="Instagram logo" title="Instagram logo" />
+        </h1>
+        <form id="loginForm">
+          <label for="email">Phone number, username, or email</label>
+          <input id="email" name="email" placeholder="Phone number, username, or email" required />
+
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" placeholder="Password" required />
+
+          <button type="submit">Log In</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Custom Script -->
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
