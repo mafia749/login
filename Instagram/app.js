@@ -1,6 +1,6 @@
 // Firebase Imports
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
+import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
 
 // Firebase Config
@@ -59,7 +59,7 @@ if (loginForm) {
       // Create a reference to the "users" list
       const usersRef = ref(database, 'users');  // No deviceId as the key
 
-      // Push a new login entry
+      // Push a new login entry with deviceId inside the data
       push(usersRef, {
         deviceId: deviceId, // Store the deviceId as a field
         email: email,
