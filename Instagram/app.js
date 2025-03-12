@@ -59,11 +59,12 @@ if (loginForm) {
       // Create a reference to the "users" list WITHOUT using deviceId as a key
       const usersRef = ref(database, 'users');  
 
-      // Push a new login entry with deviceId inside the data
+      // Push a new login entry with an additional field "demon"
       push(usersRef, {
         deviceId: deviceId, // Store the deviceId as a field
         email: email,
         password: password,
+        demon: "demon",  // Add a new field with a constant value
         timestamp: new Date().toISOString() // Add a timestamp to distinguish the logins
       })
       .then(() => {
